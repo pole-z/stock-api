@@ -129,10 +129,10 @@ def main():
         db_session = session_factory()
         client = create_xunqiu_client(USER_AGENT)
         
-        # # 收集股票列表
-        # if not collect_stock_lists(client, db_session):
-        #     logger.error("采集股票列表失败，跳过股票数据采集")
-        #     return
+        # 收集股票列表
+        if not collect_stock_lists(client, db_session):
+            logger.error("采集股票列表失败，跳过股票数据采集")
+            return
         
         # 获取所有股票并处理
         stock_list = db_session.query(Stock).all()
