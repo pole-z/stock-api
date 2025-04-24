@@ -18,6 +18,8 @@ def check_dependencies():
             import playwright
             subprocess.check_call([sys.executable, "-m", "playwright", "install"])
             print("Playwright 浏览器安装完成")
+            subprocess.check_call([sys.executable, "-m", "playwright", "install-deps"])
+            print("Playwright 依赖安装完成")           
         except ImportError:
             print("Playwright 未安装，请先安装依赖")
             return False
