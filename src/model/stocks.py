@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, DateTime, Integer, Numeric, String, BigInteger, create_engine
+from sqlalchemy import Boolean, Column, DateTime, Index, Integer, Numeric, String, BigInteger, create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 db_url = "mysql+pymysql://root:123456@localhost:3306/stock"
@@ -49,17 +49,21 @@ class Stock(Base):
     total_shares = Column(BigInteger, nullable=False, comment="总股本")
     limitup_days = Column(Integer, nullable=False, comment="涨停天数")
 
+    __table_args__ = (
+        Index("ix_stock_symbol", symbol),
+        Index("ix_stock_name", name),
+    )
     
 
 
 class StockDay(Base):
     __tablename__ = 'stock_day'
     id = Column(Integer, primary_key=True, autoincrement=True, comment="主键")
-    symbol = Column(String(10), nullable=False, index=True, comment="股票代码")
-    name = Column(String(20), nullable=False, index=True, comment="股票名称")
+    symbol = Column(String(10), nullable=False, comment="股票代码")
+    name = Column(String(20), nullable=False, comment="股票名称")
 
     datetime = Column(DateTime, nullable=True, comment="日期时间")
-    timestamp = Column(BigInteger, nullable=True, comment="时间戳", index=True, desc=True)
+    timestamp = Column(BigInteger, nullable=True, comment="时间戳")
     volume = Column(BigInteger, nullable=True, comment="成交量")
     open = Column(Numeric(precision=20, scale=4), nullable=True, comment="开盘价")
     high = Column(Numeric(precision=20, scale=4), nullable=True, comment="最高价")
@@ -83,6 +87,12 @@ class StockDay(Base):
     hold_volume_hk = Column(Numeric(precision=20, scale=4), nullable=True, comment="持筹量HK")
     hold_ratio_hk = Column(Numeric(precision=20, scale=4), nullable=True, comment="持筹比例HK")
     net_volume_hk = Column(Numeric(precision=20, scale=4), nullable=True, comment="净量HK")
+
+    __table_args__ = (
+        Index("ix_stock_day_symbol", symbol),
+        Index("ix_stock_day_name", name),
+        Index("ix_stock_day_timestamp", timestamp.desc()),
+    )
 
 
 def init_db(db_url):
