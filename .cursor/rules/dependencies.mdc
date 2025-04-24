@@ -1,0 +1,34 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 依赖管理
+
+项目使用 [src/utils/dependencies.py](mdc:src/utils/dependencies.py) 实现集中式依赖管理。
+
+## 依赖管理流程
+1. 所有依赖通过 `requirements.txt` 统一管理
+2. 导入时自动检查依赖：
+   ```python
+   from utils.dependencies import ensure_dependencies
+   ensure_dependencies()  # 触发依赖检查
+   ```
+
+## 实现细节
+- 导入 `utils` 包时自动检查和安装依赖
+- 使用 `pip` 从 `requirements.txt` 安装依赖
+- 包含 Playwright 浏览器的安装
+- 使用单例模式避免重复检查
+
+## 主要特性
+1. 导入时自动解析依赖
+2. 通过 `requirements.txt` 实现依赖统一管理
+3. Playwright 浏览器自动安装
+4. 安全的多次导入（只检查一次）
+
+## 使用方法
+导入 `utils` 包时会自动管理依赖：
+```python
+from utils import logger  # 这将触发依赖检查
+```

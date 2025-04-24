@@ -1,6 +1,6 @@
+from utils.dependencies import ensure_dependencies
+ensure_dependencies()
 import time
-import subprocess
-import sys
 import concurrent.futures
 from utils import logger
 from model.stocks import Stock, StockDay, session_factory
@@ -11,29 +11,6 @@ from stocks.xunqiu.store import stock_day_save, stock_save
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64; x64; rv:134.0) Gecko/20100101 Firefox/134.0"
 # 并行处理线程数
 MAX_WORKERS = 10
-
-def check_dependencies():
-    """检查并安装依赖"""
-    try:
-        # 检查依赖是否已安装
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "src/requirements.txt"])
-        logger.info("依赖检查完成")
-        
-        # 安装 playwright 浏览器
-        try:
-            import playwright
-            subprocess.check_call([sys.executable, "-m", "playwright", "install"])
-            logger.info("Playwright 浏览器安装完成")
-        except ImportError:
-            logger.error("Playwright 未安装，请先安装依赖")
-            return False
-        except Exception as e:
-            logger.error(f"Playwright 浏览器安装失败: {e}")
-            return False
-        return True
-    except Exception as e:
-        logger.error(f"依赖安装失败: {e}")
-        return False
 
 def collect_stock_lists(client, db_session):
     """收集股票列表数据"""
@@ -119,11 +96,6 @@ def process_stocks_parallel(stocks):
 
 def main():
     """主函数"""
-    # 检查依赖
-    if not check_dependencies():
-        logger.error("依赖检查失败，程序退出")
-        return
-    
     try:
         # 创建数据库会话和客户端
         db_session = session_factory()
