@@ -1,0 +1,13 @@
+.conda
+.venv
+.vscode
+.idea
+.cursorrules
+
+*.sqlite
+**/__pycache__/**
+**/cache_db/**
+**/*.log
+
+src/*.json
+src/test.py
