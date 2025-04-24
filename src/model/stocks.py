@@ -59,7 +59,7 @@ class StockDay(Base):
     name = Column(String(20), nullable=False, index=True, comment="股票名称")
 
     datetime = Column(DateTime, nullable=True, comment="日期时间")
-    timestamp = Column(BigInteger, nullable=True, comment="时间戳")
+    timestamp = Column(BigInteger, nullable=True, comment="时间戳", index=True, desc=True)
     volume = Column(BigInteger, nullable=True, comment="成交量")
     open = Column(Numeric(precision=20, scale=4), nullable=True, comment="开盘价")
     high = Column(Numeric(precision=20, scale=4), nullable=True, comment="最高价")
